@@ -62,6 +62,8 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
               'Name: $petName',
               style: TextStyle(fontSize: 20.0),
             ),
+            Image.asset('asset/dog-png-30.png'
+                , height: 200, width: 200),
             SizedBox(height: 16.0),
             Text(
               'Happiness Level: $happinessLevel',
