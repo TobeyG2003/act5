@@ -20,6 +20,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   String currentLevel = "Neutral";
   int timecounter = 0;
   int wincounter = 0;
+  double energy = 1.0; // Energy level from 0.0 to 1.0
   bool win = false;
   bool gameover = false;
   bool timerstarted = false;
@@ -35,6 +36,8 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   void _playWithPet() {
     setState(() {
       happinessLevel += 10;
+      energy -= 0.1;
+      if (energy < 0) energy = 0;
       _updateHunger();
     });
   }
@@ -42,6 +45,8 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
   void _feedPet() {
     setState(() {
       hungerLevel -= 10;
+      energy += 0.1;
+      if (energy > 1) energy = 1;
       _updateHappiness();
     });
   }
@@ -91,6 +96,8 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
       timecounter += 1;
       if (timecounter % 30 == 0) {
         _updateHunger();
+        energy += 0.1;
+        if (energy > 1) energy = 1;
       }
       if (hungerLevel >= 100 && happinessLevel <= 10) {
         gameover = true;
@@ -146,7 +153,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
               },
             ),
             ),
-            SizedBox(height: 16.0),
+            SizedBox(height: 10.0),
             Text(
               'Name: $petName',
               style: TextStyle(fontSize: 20.0),
@@ -156,7 +163,7 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
               child:
             Image.asset('asset/dog-png-30.png'
                 , height: 200, width: 200),),
-            SizedBox(height: 16.0),
+            SizedBox(height: 10.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -172,26 +179,37 @@ class _DigitalPetAppState extends State<DigitalPetApp> {
                 Icon(Icons.sentiment_dissatisfied, color: Colors.red, size: 30),
             ],
           ),
-            SizedBox(height: 16.0),
+            SizedBox(height: 10.0),
             Text(
               'Hunger Level: $hungerLevel',
               style: TextStyle(fontSize: 20.0),
             ),
-            SizedBox(height: 32.0),
+              Text(
+                'Energy Level: ',
+                style: TextStyle(fontSize: 20.0),
+              ),
+              SizedBox(width: 300, height: 25,
+              child: LinearProgressIndicator(
+      value: energy, 
+      backgroundColor: Colors.grey[200],
+      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+   ),
+              ),
+            SizedBox(height: 25.0),
             ElevatedButton(
               onPressed: _playWithPet,
               child: Text('Play with Your Pet'),
             ),
-            SizedBox(height: 16.0),
+            SizedBox(height: 10.0),
             ElevatedButton(
               onPressed: _feedPet,
               child: Text('Feed Your Pet'),
             ),
-            SizedBox(height: 16.0),
+            SizedBox(height: 10.0),
             Text('Win Progress: $wincounter / 100'),
             Text(
               'Time Elapsed: $timecounter seconds',
-              style: TextStyle(fontSize: 16.0),
+              style: TextStyle(fontSize: 10.0),
             ),
               if (gameover && !win) 
                 Text('Game Over')
